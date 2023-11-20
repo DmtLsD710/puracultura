@@ -3,24 +3,24 @@ from django.conf import settings
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='Nombre')
     
     class Meta:
         ordering = ('name',)
-        verbose_name_plural = 'Categories'
+        verbose_name_plural = 'Categorías'
         
     def __str__(self):
         return self.name
     
 class Item(models.Model):
-    category = models.ForeignKey(Category, related_name='items', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    price = models.FloatField()
-    image = models.ImageField(upload_to='item_images', blank=True, null=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='items', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    stock = models.PositiveIntegerField(default=1)
+    category = models.ForeignKey(Category, related_name='items', on_delete=models.CASCADE, verbose_name='Categoría')
+    name = models.CharField(max_length=255, verbose_name='Nombre')
+    description = models.TextField(blank=True, null=True, verbose_name='Descripción')
+    price = models.FloatField(verbose_name='Precio')
+    image = models.ImageField(upload_to='item_images', blank=True, null=True, verbose_name='Imagen')
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='items', on_delete=models.CASCADE, verbose_name='Creado por')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado en')
+    stock = models.PositiveIntegerField(default=1, verbose_name='Inventario')
     
     @property
     def is_sold(self):

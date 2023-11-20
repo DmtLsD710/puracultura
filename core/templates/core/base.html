@@ -17,7 +17,7 @@
         <div class="space-x-6"> 
             <a href="#" class="text-lg font-semibold hover:text-gray-500"> <span>&#128269;</span> </a>
             {% if request.user.is_authenticated and request.user.vendedor %}
-                <a href="#" class="text-lg font-semibold hover:text-gray-500">Nuevo producto</a>
+                <a href="{% url 'item:new' %}" class="text-lg font-semibold hover:text-gray-500">Nuevo producto</a>
                 <a href="#" class="text-lg font-semibold hover:text-gray-500">Pedidos</a>
             {% endif %}
 
@@ -47,9 +47,7 @@
                 <h3 class="mb-5 font-semibold text-gray-400">Menu</h3>
 
                 <ul class="space-y-2">
-                    <li><a href="#"  class="text-lg text-teal-500 hover:text-teal-700">Acerca de</a></li>
                     <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Contacto</a></li>
-                    <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Politicas de privacida</a></li>
                     <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Terminos y condiciones </a></li>
                 </ul>
     </body>
