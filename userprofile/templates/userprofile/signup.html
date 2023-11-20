@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+
+{% block title %}Registrar{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-md mx-auto mt-6 p-8 border border-gray-300 rounded-lg shadow-lg bg-slate-800">
+    <h1 class="text-2xl text-center font-bold mb-8 text-white">Registrar</h1>
+
+    <form method="post" action="." id="signupForm">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="mb-4" id="{{ field.name }}_div">
+                {{ field.errors.as_ul }}
+                <label for="{{ field.id_for_label }}" class="block text-sm font-bold mb-2 text-white">{{ field.label }}</label>
+                
+                {% if field.name == 'vendedor' %}
+                    <input type="checkbox" name="{{ field.name }}" id="{{ field.id_for_label }}" {% if field.value %}checked{% endif %}>
+                    <label for="{{ field.id_for_label }}" class="text-white">{{ field.label }}</label><br>
+                {% else %}
+                    {{ field }}
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <button type="submit" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg">Registrar</button>
+    </form>
+</div>
+
+<script>
+    const bioDiv = document.getElementById("biografia_div");
+    bioDiv.style.display = "none";
+    bioDiv.style.transition = "opacity 0.5s ease";
+
+    document.getElementById('{{ form.vendedor.id_for_label }}').addEventListener('change', function() {
+        if (this.checked) {
+            bioDiv.style.display = "block";
+            setTimeout(() => bioDiv.style.opacity = "1", 300); 
+        } else {
+            bioDiv.style.opacity = "0";
+            setTimeout(() => bioDiv.style.display = "none", 500); 
+        }
+    });
+</script>
+{% endblock %}

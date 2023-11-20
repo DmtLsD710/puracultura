@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+   <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Productos Nuevos</h2>
+
+        <div class="grid grid-cols-3 gap-3">
+            {% for item in items %}
+                <div>
+                    <a href= "{% url 'item:detail' item.id %}">
+                        <div>
+                            <img src="{{ item.image.url }}" alt="item" class="w-full h-80 object-cover rounded-xl">
+                        </div>
+
+                        <div class="p-6 bg-white rounded-xl">
+                            <h2 class="mb-2 text-2xl">{{ item.name }}</h2>
+                            <p class="mb-2 text-gray-600">{{ item.description }}</p>
+                            <p class="text-gray-900 font-bold">Precio: {{ item.price }} $</p>
+                        </div>
+            
+                    </a> 
+                </div>
+            {% endfor %}
+        </div>
+   </div>
+
+   <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Categorias</h2>
+
+        <div class="grid grid-cols-3 gap-2">
+            {% for category in categories %}
+                <div>
+                    <a href="#">
+                        <div class="p-6 bg-white rounded-xl">
+                            <h2 class="mb-2 text-2xl">{{ category.name }}</h2>
+                            <p class="text-gray-900 font-bold">{{ category.items.count }} {% if category.items.count == 1 %}producto{% else %}productos{% endif %}</p>
+                        </div>
+                    </a> 
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
