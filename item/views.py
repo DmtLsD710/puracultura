@@ -1,50 +1,145 @@
-# Importamos los módulos necesarios de Django
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
-
-# Importamos el formulario NewItemForm y el modelo Item de nuestros módulos locales
+from django.db.models import Q
+from .cart import Cart
 from .forms import NewItemForm
-from .models import Item
+from .models import Item, Category
 
-# Definimos la vista 'detail'
+from django.core.paginator import Paginator
+
+# Detail view for a single item
 def detail(request, pk):
-    # Obtenemos el item con la clave primaria 'pk', o lanzamos un error 404 si no existe
     item = get_object_or_404(Item, pk=pk)
-    # Obtenemos los items relacionados que pertenecen a la misma categoría y tienen stock, excluyendo el item actual
-    related_items = Item.objects.filter(category=item.category, stock__gt=0 ).exclude(pk=pk)[0:3]
+    related_items = Item.objects.filter(category=item.category, stock__gt=0).exclude(pk=pk)[:3]
     
-    # Renderizamos la plantilla 'item/detail.html' con el item y los items relacionados
     return render(request, 'item/detail.html', {
         'item': item,
         'related_items': related_items
-        })
-    
-    
-# Definimos la vista 'new', que requiere que el usuario esté autenticado
+    })
+
+# View for adding a new item
 @login_required
 def new(request):
-    # Si el usuario no es un vendedor, lo redirigimos a la página de inicio
     if not request.user.vendedor:
         return redirect('core:home') 
 
-    # Si la solicitud es un POST, procesamos el formulario
     if request.method == 'POST':
         form = NewItemForm(request.POST, request.FILES)
-        
-        # Si el formulario es válido, guardamos el item y lo asociamos con el usuario actual
         if form.is_valid():
             item = form.save(commit=False)
             item.created_by = request.user
             item.save()
-            
-            # Redirigimos al usuario a la página de detalles del item
             return redirect('item:detail', pk=item.id)
-    # Si la solicitud no es un POST, mostramos el formulario vacío
     else:
         form = NewItemForm()
-        
-    # Renderizamos la plantilla 'item/form.html' con el formulario y el título
+    
     return render(request, 'item/form.html', {
         'form': form,
         'title': 'Nuevo Producto',
-    })   
+    })
+
+# Dashboard view to list all items for the current seller
+@login_required
+def dashboard(request):
+    if not request.user.vendedor:
+        return redirect('core:home')
+
+    items = Item.objects.filter(created_by=request.user)
+    return render(request, 'item/dashboard.html', {'items': items})
+
+# View for editing an existing item
+@login_required
+def edit_item(request, pk):
+    if not request.user.vendedor:
+        return redirect('core:home')
+
+    item = get_object_or_404(Item, pk=pk, created_by=request.user)
+    if request.method == 'POST':
+        form = NewItemForm(request.POST, request.FILES, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('item:detail', pk=item.pk)
+    else:
+        form = NewItemForm(instance=item)
+    
+    return render(request, 'item/edit_item.html', {
+        'form': form,
+        'title': 'Editar Producto',
+        'item': item,  # Pass the item to the template for additional context (optional)
+    })
+
+# Function to delete an item
+@login_required
+def delete_item(request, pk):
+    if not request.user.vendedor:
+        return redirect('core:home')
+
+    item = get_object_or_404(Item, pk=pk, created_by=request.user)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('item:dashboard')  # Redirect to the dashboard after deletion
+    return render(request, 'item/delete_confirm.html', {
+        'item': item
+    })
+
+def search(request):
+    query = request.GET.get('query', '')
+    item = Item.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    
+    paginator = Paginator(item, 20) # Show 20 items per page.
+    
+    page_number = request.GET.get('page')
+    item = paginator.get_page(page_number)
+    
+    return render(request, 'item/search.html', {
+        'query': query,
+        'item': item
+    })    
+    
+def category_detail(request, pk): 
+    category = get_object_or_404(Category, pk=pk)
+    items = category.items.all()
+    
+    paginator = Paginator(items, 20) # Show 20 items per page.
+
+    page_number = request.GET.get('page')
+    items = paginator.get_page(page_number)
+    
+    return render(request, 'item/category_detail.html', {
+        'category': category,
+        'items': items
+    })
+
+@login_required   
+def add_to_cart(request, item_id):
+    cart = Cart(request)
+    cart.add(item_id)
+
+    return redirect('item:cart_view')
+
+@login_required
+def remove_from_cart(request, item_id):
+    cart = Cart(request)
+    cart.remove(item_id)
+
+    return redirect('item:cart_view')
+@login_required
+def cart_view(request):
+    cart = Cart(request)
+
+    return render(request, 'item/cart_view.html', {
+        'cart': cart
+    })
+    
+@login_required
+def increase_quantity(request, item_id):
+    cart = Cart(request)
+    cart.add(item_id, quantity=1)  
+    return redirect('item:cart_view')
+
+@login_required
+def decrease_quantity(request, item_id):
+    cart = Cart(request)
+    cart.add(item_id, quantity=-1) 
+    return redirect('item:cart_view')
+    

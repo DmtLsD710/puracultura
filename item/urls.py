@@ -9,6 +9,17 @@ app_name = 'item'
 urlpatterns = [
     # La URL 'new/' está asociada con la vista 'new'. Esto significa que cuando un usuario visita 'item/new/', Django ejecutará la función de vista 'new'.
     path('new/', views.new, name='new'),
+    path('add-to-cart/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+    path('remove-from-cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('increase-quantity/<int:item_id>/', views.increase_quantity, name='increase_quantity'),
+    path('decrease-quantity/<int:item_id>/', views.decrease_quantity, name='decrease_quantity'),
+    path('cart/', views.cart_view, name='cart_view'),
     # La URL '<int:pk>/' está asociada con la vista 'detail'. Esto significa que cuando un usuario visita 'item/1/', por ejemplo, Django ejecutará la función de vista 'detail' con 'pk' igual a 1.
     path('<int:pk>/', views.detail, name='detail'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('<int:pk>/edit/', views.edit_item, name='edit'),
+    path('<int:pk>/delete/', views.delete_item, name='delete'),
+    path('search/', views.search, name='search'),
+    path('category/<int:pk>/', views.category_detail, name='category_detail'),
+    
 ]

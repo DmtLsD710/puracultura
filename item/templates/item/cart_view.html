@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Carrito{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-semibold text-center mb-6">Carrito</h1>
+
+    <div class="space-y-4">
+        {% for item in cart %}
+            <div class="flex justify-between items-center border-b-2 border-gray-100 py-4">
+                <div>
+                    <h2 class="text-xl font-bold">{{ item.product.name }}</h2> <!-- Access the nested product for name -->
+                    <p class="text-gray-600">Cantidad: {{ item.quantity }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-gray-900 font-bold">{{ item.product.price }} $</p> <!-- Access the nested product for price -->
+                    <a href="{% url 'item:remove_from_cart' item.product.id %}" class="text-sm text-red-600 hover:text-red-800">Remover</a>
+                </div>
+            </div>
+            <div>
+                <a href="{% url 'item:increase_quantity' item.product.id %}" class="px-2 py-1 bg-blue-500 rounded text-white">+</a>
+                {% if item.quantity > 1 %}
+                    <a href="{% url 'item:decrease_quantity' item.product.id %}" class="px-2 py-1 bg-red-500 rounded text-white">-</a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p class="text-center text-gray-600">Tu carrito está vacío.</p>
+        {% endfor %}
+    </div>
+
+    {% if cart %}
+        <div class="text-right mt-6">
+            <strong class="text-xl font-bold">Precio total + IVA: {{ cart.get_total_cost }} $</strong>
+        </div>
+        <a href="#" class="px-4 rounded py-2 bg-teal-600 text-white mt-4">Comprar</a>
+    {% endif %}
+</div>
+{% endblock %}

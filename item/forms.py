@@ -11,7 +11,7 @@ class NewItemForm(forms.ModelForm):
         # Especificamos que el modelo a utilizar es Item
         model = Item
         # Definimos los campos del modelo que queremos incluir en el formulario
-        fields = ('name', 'description', 'price', 'category', 'image')
+        fields = ('name', 'description', 'price', 'category', 'stock', 'image')
         # Definimos los widgets para los campos del formulario. Esto nos permite personalizar cómo se renderizan los campos.
         widgets = {
             # Para el campo 'name', usamos un TextInput y establecemos el atributo 'placeholder' a 'Nombre'
@@ -24,4 +24,6 @@ class NewItemForm(forms.ModelForm):
             'category': forms.Select(attrs={'placeholder': 'Categoría'}),
             # Para el campo 'image', usamos un ClearableFileInput y establecemos el atributo 'placeholder' a 'Imagen'
             'image': forms.ClearableFileInput(attrs={'placeholder': 'Imagen'}),
+            # Para el campo 'stock', usamos un NumberInput y establecemos el atributo 'placeholder' a 'Inventario'
+            'stock': forms.NumberInput(attrs={'placeholder': 'Inventario'}),
         }

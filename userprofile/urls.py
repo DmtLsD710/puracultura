@@ -14,4 +14,8 @@ urlpatterns = [
     # La URL 'logout/' está asociada con la vista 'LogoutView' y tiene el nombre 'logout'
     # 'LogoutView.as_view(next_page='/')' crea una vista basada en clase que redirige al usuario a la página de inicio después de cerrar sesión
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('perfil/', views.perfil, name='perfil'),
+    path('agregar_direccion/', views.agregar_direccion, name='agregar_direccion'),
+    path('editar_direccion/<int:id>/', views.editar_direccion, name='editar_direccion'),
+    path('eliminar_direccion/<int:id>/', views.eliminar_direccion, name='eliminar_direccion'),
 ]

@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Editar Dirección</h2>
+    <form method="post" action="{% url 'userprofile:editar_direccion' direccion.id %}">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 gap-6">
+            {{ direccion_form| crispy }}
+        </div>
+        <div class="flex justify-end mt-4">
+            <a href="{% url 'userprofile:perfil' %}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2">Cancelar</a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Guardar Cambios</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

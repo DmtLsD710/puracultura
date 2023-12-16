@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Editar Perfil</h2>
+    <form method="post" class="mb-6">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 gap-6">
+            {{ user_form.first_name|as_crispy_field }}
+            {{ user_form.last_name|as_crispy_field }}
+            {{ user_form.email|as_crispy_field }}
+            {% if user_form.biografia %}
+                {{ user_form.biografia|as_crispy_field }}
+            {% endif %}
+            {{ user_form.telefono|as_crispy_field }}
+        </div>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Guardar Cambios</button>
+    </form>
+    
+
+    <h2 class="text-2xl font-bold mb-4">Mis Direcciones</h2>
+    <form method="post" action="{% url 'userprofile:agregar_direccion' %}" class="mb-6">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 gap-6">
+            {{ direccion_form|crispy }}
+        </div>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Agregar Dirección</button>
+    </form>
+
+    <div>
+        {% for direccion in direcciones %}
+            <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow mb-4">
+                <div>
+                    <p>{{ direccion.direccion }}, {{ direccion.ciudad }}, {{ direccion.pais }}</p>
+                    <p class="text-gray-600">Código Postal: {{ direccion.codigo_postal }}</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="{% url 'userprofile:editar_direccion' direccion.id %}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Editar</a>
+                    <a href="{% url 'userprofile:eliminar_direccion' direccion.id %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay direcciones agregadas.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

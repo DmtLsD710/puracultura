@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
+    'crispy_tailwind',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +45,7 @@ INSTALLED_APPS = [
     'item',
     'userprofile',
     'core',
-    'widget_tweaks',
+    
 ]
 
 MIDDLEWARE = [
@@ -132,5 +135,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'userprofile.Usuario'
 
+CART_SESSION_ID = 'cart'
+SESSION_COOKIE_AGE = 86400 * 7
 
 AUTHENTICATION_BACKENDS = ['userprofile.backends.EmailOrUsernameBackend']
+
+CRISPY_TEMPLATE_PACK = 'tailwind'

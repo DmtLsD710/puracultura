@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-8">
+    <h1 class="text-2xl font-bold mb-4 text-center">Dashboard</h1>
+    <a href="{% url 'item:new' %}" class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 rounded">Agregar producto</a>
+
+    {% if items %}
+        <div class="mt-6">
+            {% for item in items %}
+            <div class="flex justify-between p-4 mb-4 bg-white rounded shadow">
+                <div>{{ item.name }}</div>
+                <div>
+                    <a href="{% url 'item:edit' pk=item.pk %}" class="text-sm bg-orange-500 hover:bg-yellow-700 text-white py-1 px-2 rounded">Editar</a>
+                    <a href="{% url 'item:delete' pk=item.pk %}" class="text-sm bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">Borrar</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="mt-4">No tienes productos empieza por agregar uno.</p>
+    {% endif %}
+</div>
+{% endblock %}

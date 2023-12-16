@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl">{{ category.name }}</h1>
+
+    <div class="flex flex-wrap gap-2">
+        {% if items %}
+            {% for item in items %}
+                <div>
+                    <a href="{% url 'item:detail' item.id %}">
+                        <div>
+                            <img src="{{ item.image.url }}" alt="item" class="w-full h-80 object-cover rounded-xl">
+                        </div>
+
+                        <div class="p-6 bg-white rounded-xl">
+                            <h2 class="mb-2 text-2xl">{{ item.name }}</h2>
+                            <p class="mb-2 text-gray-600">{{ item.description }}</p>
+                            <p class="text-gray-900 font-bold">Precio: {{ item.price }} $</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="w-full p-2">
+                <p class="text-xl text-slate-800">No hay productos en esta categoría.</p>
+            </div>
+        {% endif %}
+        {% if items.has_other_pages %}
+            <div class="pagination">
+                {% if items.has_previous %}
+                    <a href="?page={{ items.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current-page">{{ items.number }}</span>
+
+                {% if items.has_next %}
+                    <a href="?page={{ items.next_page_number }}">next</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -12,25 +12,38 @@
 
     <body> 
         <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
-        <a href="/" class="text-xl font-semibold">PuraCultura</a>   
+            <a href="/" class="text-xl font-semibold">PuraCultura</a>   
 
-        <div class="space-x-6"> 
-            <a href="#" class="text-lg font-semibold hover:text-gray-500"> <span>&#128269;</span> </a>
-            {% if request.user.is_authenticated and request.user.vendedor %}
-                <a href="{% url 'item:new' %}" class="text-lg font-semibold hover:text-gray-500">Nuevo producto</a>
-                <a href="#" class="text-lg font-semibold hover:text-gray-500">Pedidos</a>
-            {% endif %}
-
-            {%if request.user.is_authenticated%}
-                <a href="#" class="text-lg font-semibold hover:text-gray-500">Carrito</a>
-                <a href="#" class="text-lg font-semibold hover:text-gray-500">Mensajes</a>
-                <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
-            {%else%}
-                <a href="{% url 'userprofile:signup' %}" class="px-6 py-3 text-lg font-semibold bg-slate-700 text-white rounded-xl hover:bg-slate-500">Registro</a>
-                <a href="{% url 'userprofile:login' %}" class="px-6 py-3 text-lg font-semibold bg-slate-700 text-white rounded-xl hover:bg-slate-500">Log in</a>
-            {%endif%}
+            <div class="flex-grow mx-4 max-w-xl">
+                <form action="{% url 'item:search' %}" method="get">
+                    <div class="relative flex w-full items-stretch">
+                        <input type="search" name="query" class="relative flex-auto appearance-none rounded-l-full border border-r-0 border-neutral-300 px-4 py-2 leading-[1.6] transition duration-200 ease-in-out focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Buscar" aria-label="Buscar">
+                        <button class="flex items-center justify-center rounded-r-full border border-l-0 border-neutral-300 px-4 py-2 text-neutral-700 transition duration-200 ease-in-out focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" type="submit" id="button-addon2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+                                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
             
-        </div>
+            <div class="flex space-x-4 items-center">
+                {% if request.user.is_authenticated %}
+                    {% if request.user.vendedor %}
+                        <a href="{% url 'item:dashboard' %}" class="text-lg font-semibold hover:text-gray-500">Dashboard</a>
+                        <a href="{% url 'userprofile:perfil' %}" class="text-lg font-semibold hover:text-gray-500">Perfil</a>
+                        <a href="#" class="text-lg font-semibold hover:text-gray-500">Mensajes</a>
+                        <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
+                    {% else %}
+                        <a href="{% url 'userprofile:perfil' %}" class="text-lg font-semibold hover:text-gray-500">Perfil</a>
+                        <a href="#" class="text-lg font-semibold hover:text-gray-500">Carrito</a>
+                        <a href="#" class="text-lg font-semibold hover:text-gray-500">Mensajes</a>
+                        <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'userprofile:signup' %}" class="px-6 py-3 text-lg font-semibold bg-slate-700 text-white rounded-xl hover:bg-slate-500">Registro</a>
+                    <a href="{% url 'userprofile:login' %}" class="px-6 py-3 text-lg font-semibold bg-slate-700 text-white rounded-xl hover:bg-slate-500">Log in</a>
+                {% endif %}
         </nav>
         <div class="px-6 py-6">
             {% block content %}
@@ -50,5 +63,7 @@
                     <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Contacto</a></li>
                     <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Terminos y condiciones </a></li>
                 </ul>
+            </div>
+        </footer>
     </body>
 </html>

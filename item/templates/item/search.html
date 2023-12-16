@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Resultados de busqueda: "{{query}}"{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl">Resultados de busqueda: "{{query}}"</h1>
+
+    <div class="flex flex-wrap gap-2">
+        {% if item %}
+            {% for i in item %}
+                <div>
+                    <a href= "{% url 'item:detail' i.id %}">
+                        <div>
+                            <img src="{{ i.image.url }}" alt="item" class="w-full h-80 object-cover rounded-xl">
+                        </div>
+
+                        <div class="p-6 bg-white rounded-xl">
+                            <h2 class="mb-2 text-2xl">{{ i.name }}</h2>
+                            <p class="mb-2 text-gray-600">{{ i.description }}</p>
+                            <p class="text-gray-900 font-bold">Price: {{ i.price }} $</p>
+                        </div>
+                    </a> 
+                </div>
+            {% endfor %}
+        {% else %}
+        <div class="w-full p-2">
+            <p class="text-xl text-slate-800">No se encontraron productos relacionados a tu busqueda:"{{query}}".</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if item.has_other_pages %}
+      <div class="pagination">
+        {% if item.has_previous %}
+          <a href="?query={{ query }}&page={{ item.previous_page_number }}">anterior</a>
+        {% endif %}
+        
+        <span class="current-page">{{ item.number }}</span>
+        
+        {% if item.has_next %}
+          <a href="?query={{ query }}&page={{ item.next_page_number }}">siguiente</a>
+        {% endif %}
+      </div>
+    {% endif %}
+{% endblock %}

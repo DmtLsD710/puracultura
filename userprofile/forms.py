@@ -12,13 +12,9 @@ class LoginForm(AuthenticationForm):
         'class': 'w-full px-4 py-2 border rounded-xl'
     }))
 
-# Definimos el formulario de registro
+
 class SignupForm(UserCreationForm):
-    # Definimos los campos del formulario
-    # Nota: los atributos 'attrs' definen los atributos HTML de los campos del formulario
-    # 'required' define si el campo es obligatorio o no
-    # 'max_length' define la longitud máxima del campo
-    # Los diferentes tipos de campos (CharField, EmailField, BooleanField, etc.) representan diferentes tipos de datos
+    
     username = forms.CharField(label = 'Usuario', widget=forms.TextInput(attrs={
         'placeholder': 'Nombre de usuario',
         'class': 'w-full px-4 py-2 border rounded-xl'
@@ -101,3 +97,27 @@ class SignupForm(UserCreationForm):
                 codigo_postal=self.cleaned_data.get('codigo_postal')
             )
         return user  # Devolvemos el usuario creado
+    
+class UsuarioForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        vendedor = self.instance.vendedor if self.instance else False
+        if not vendedor:
+            del self.fields['biografia']
+
+    class Meta:
+        model = Usuario
+        fields = ['first_name', 'last_name', 'email', 'biografia', 'telefono']
+        labels = {
+            'first_name': 'Nombre',
+            'last_name': 'Apellidos',
+            'email': 'Correo electrónico',
+            'biografia': 'Biografía',
+            'telefono': 'Teléfono',
+        }
+    
+        
+class DireccionForm(forms.ModelForm):
+    class Meta:
+        model = Direccion
+        fields = ['direccion', 'ciudad', 'pais', 'codigo_postal']
