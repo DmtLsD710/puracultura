@@ -14,7 +14,7 @@
     <body> 
             <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
                 <a href="/">
-                    <img src="{% static 'logo_images/PuraCulturaLogo.jpg' %}" alt="PuraCultura Logo" class="w-64 h-auto">
+                    <img src="{% static 'logo_images/PuraCulturaLogo1.jpg' %}" alt="PuraCultura Logo" class="w-64 h-auto">
                 </a> 
             <div class="flex-grow mx-4 max-w-xl">
                 <form action="{% url 'item:search' %}" method="get">
@@ -37,8 +37,17 @@
                         <a href="#" class="text-lg font-semibold hover:text-gray-500">Mensajes</a>
                         <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
                     {% else %}
-                        <a href="{% url 'userprofile:perfil' %}" class="text-lg font-semibold hover:text-gray-500">Perfil</a>
-                        <a href="{% url 'item:cart_view' %}" class="text-lg font-semibold hover:text-gray-500">Carrito</a>
+                        <a href="{% url 'item:cart_view' %}" class="relative text-lg font-semibold hover:text-gray-500 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bag-fill" viewBox="0 0 16 16">
+                                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z"/>
+                            </svg>
+                            {% if cart_item_count >= 1 %}
+                                <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                    {{ cart_item_count }}
+                                </span>
+                            {% endif %}
+                        </a>    
+                        <a href="{% url 'userprofile:perfil' %}" class="text-lg font-semibold hover:text-gray-500">Perfil</a>                    
                         <a href="#" class="text-lg font-semibold hover:text-gray-500">Mensajes</a>
                         <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
                     {% endif %}

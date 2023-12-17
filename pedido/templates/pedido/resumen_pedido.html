@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Resumen del Pedido</h2>
+    <form method="post" action="{% url 'pedido:confirmar_compra' %}">
+        {% csrf_token %}
+        <div class="mb-6">
+            <label for="direccion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Elige tu dirección de envío:</label>
+            <select id="direccion" name="direccion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                {% for direccion in direcciones %}
+                    <option value="{{ direccion.id }}">{{ direccion.direccion }}, {{ direccion.ciudad }}, {{ direccion.pais }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <!-- Resumen del Carrito -->
+        <div class="mb-6">
+            {% for item in cart %}
+            <div class="flex justify-between mb-2">
+                <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+                <span>${{ item.product.price }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- IVA y Costo Total -->
+        <div class="mb-6">
+            <div class="flex justify-between mb-2">
+                <span>Subtotal:</span>
+                <span>${{ cart.get_subtotal }}</span>
+            </div>
+            <div class="flex justify-between mb-2">
+                <span>IVA (13%):</span>
+                <span>${{ cart.get_iva }}</span>
+            </div>
+            <div class="flex justify-between">
+                <strong>Total:</strong>
+                <strong>${{ cart.get_total_cost }}</strong>
+            </div>
+        </div>
+        
+        <div class="flex justify-between items-center">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Confirmar Compra</button>
+            <a href="{% url 'item:cart_view' %}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cancelar y volver al carrito</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

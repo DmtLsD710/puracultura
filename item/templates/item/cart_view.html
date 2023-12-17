@@ -33,7 +33,7 @@
         <div class="text-right mt-6">
             <strong class="text-xl font-bold">Precio total + IVA: {{ cart.get_total_cost }} $</strong>
         </div>
-        <a href="#" class="px-4 rounded py-2 bg-teal-600 text-white mt-4">Comprar</a>
+        <a href="{% url 'pedido:resumen_pedido' %}" class="px-4 rounded py-2 bg-teal-600 text-white mt-4">Comprar</a>
     {% endif %}
 </div>
 {% endblock %}

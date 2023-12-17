@@ -98,7 +98,7 @@ def search(request):
     
 def category_detail(request, pk): 
     category = get_object_or_404(Category, pk=pk)
-    items = category.items.all()
+    items = Item.objects.filter(category=category, stock__gt=0) 
     
     paginator = Paginator(items, 20) # Show 20 items per page.
 

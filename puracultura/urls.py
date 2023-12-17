@@ -6,6 +6,7 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('core.urls')),
     path('items/', include('item.urls')),
+    path('pedido/', include('pedido.urls')),
     path('userprofile/', include('userprofile.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

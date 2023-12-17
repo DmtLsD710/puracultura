@@ -23,10 +23,14 @@ class Cart(object):
         self.cart_session_id = cart_session_id  # Store the unique session key
 
     def __iter__(self):
-        for p in self.cart.keys():
-            self.cart[str(p)]['product'] = Item.objects.get(pk=p)
-        
-        for item in self.cart.values():
+        product_ids = self.cart.keys()
+        products = Item.objects.filter(id__in=product_ids)
+
+        cart = self.cart.copy()
+        for product in products:
+            cart[str(product.id)]['product'] = product
+
+        for item in cart.values():
             item['total_price'] = int(item['product'].price * item['quantity']) / 100
             yield item
 
@@ -54,15 +58,25 @@ class Cart(object):
             del self.cart[item_id]
         self.save()
 
+    def get_subtotal(self):
+        subtotal = sum(Item.objects.get(id=item['id']).price * item['quantity'] for item in self.cart.values())
+        return subtotal
+    
+    def get_iva(self):
+        subtotal = self.get_subtotal()  
+        iva = subtotal * 0.13
+        return iva
+    
     def get_total_cost(self):
-        total_cost = 0
-        for p in self.cart.keys():
-            self.cart[str(p)]['product'] = Item.objects.get(pk=p)
-            total_cost += self.cart[str(p)]['product'].price * self.cart[str(p)]['quantity'] 
-            tax_cost = (total_cost * 0.13) + total_cost
-        return round(tax_cost, 2)
+        subtotal = self.get_subtotal()  
+        iva = self.get_iva()
+        total_cost = subtotal + iva
+        return total_cost
 
     def save(self):
         self.session[self.cart_session_id] = self.cart
         self.session.modified = True
-        self.session.save()
+
+    def clear(self):
+        del self.session[self.cart_session_id]
+        self.session.modified = True
