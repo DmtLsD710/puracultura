@@ -1,3 +1,4 @@
+{%load static%}
 <!doctype html>
 
 <html>
@@ -11,9 +12,10 @@
     </head>
 
     <body> 
-        <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
-            <a href="/" class="text-xl font-semibold">PuraCultura</a>   
-
+            <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
+                <a href="/">
+                    <img src="{% static 'logo_images/PuraCulturaLogo.jpg' %}" alt="PuraCultura Logo" class="w-64 h-auto">
+                </a> 
             <div class="flex-grow mx-4 max-w-xl">
                 <form action="{% url 'item:search' %}" method="get">
                     <div class="relative flex w-full items-stretch">
@@ -36,7 +38,7 @@
                         <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
                     {% else %}
                         <a href="{% url 'userprofile:perfil' %}" class="text-lg font-semibold hover:text-gray-500">Perfil</a>
-                        <a href="#" class="text-lg font-semibold hover:text-gray-500">Carrito</a>
+                        <a href="{% url 'item:cart_view' %}" class="text-lg font-semibold hover:text-gray-500">Carrito</a>
                         <a href="#" class="text-lg font-semibold hover:text-gray-500">Mensajes</a>
                         <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
                     {% endif %}

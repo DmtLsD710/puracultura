@@ -1,5 +1,7 @@
 # Importamos la función 'path' y el módulo 'views' desde el paquete 'django.urls'
+from django.conf import settings
 from django.urls import path
+from django.conf.urls.static import static
 from . import views
 
 # Definimos el nombre de la aplicación como 'core'
