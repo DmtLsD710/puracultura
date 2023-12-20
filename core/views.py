@@ -3,7 +3,7 @@ from django.shortcuts import render
 from item.models import Category, Item
 
 def frontpage(request):
-    items = Item.objects.filter(stock__gt=0)[0:6]
+    items = Item.objects.filter(stock__gt=0).order_by('-created_at')[:6]
     categories = Category.objects.annotate(
         num_items_in_stock=Count('items', filter=Q(items__stock__gt=0))
     ).filter(num_items_in_stock__gt=0)
