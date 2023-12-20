@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Mis Pedidos{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-10 mb-10">
+    <h2 class="text-3xl font-semibold mb-5">Historial de Pedidos</h2>
+    {% if page_obj %}
+        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="py-3 px-6">Pedido ID</th>
+                        <th scope="col" class="py-3 px-6">Vendedor</th>
+                        <th scope="col" class="py-3 px-6">Fecha</th>
+                        <th scope="col" class="py-3 px-6">Estado</th>
+                        <th scope="col" class="py-3 px-6">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in page_obj %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="py-4 px-6">{{ pedido.id }}</td>
+                            <td class="py-4 px-6">{{ pedido.vendedor_name }}</td>
+                            <td class="py-4 px-6">{{ pedido.fecha_creacion }}</td>
+                            <td class="py-4 px-6">{{ pedido.estado }}</td>
+                            <td class="py-4 px-6">${{ pedido.costo_total }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="bg-white shadow-md rounded my-6 p-6">
+            No has realizado pedidos aún.
+        </div>
+    {% endif %}
+    <div class="mt-4">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="mr-2">Anterior</a>
+        {% endif %}
+        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="ml-2">Siguiente</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

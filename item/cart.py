@@ -60,18 +60,18 @@ class Cart(object):
 
     def get_subtotal(self):
         subtotal = sum(Item.objects.get(id=item['id']).price * item['quantity'] for item in self.cart.values())
-        return subtotal
+        return round (subtotal, 2)
     
     def get_iva(self):
         subtotal = self.get_subtotal()  
         iva = subtotal * 0.13
-        return iva
+        return round (iva, 2)
     
     def get_total_cost(self):
         subtotal = self.get_subtotal()  
         iva = self.get_iva()
         total_cost = subtotal + iva
-        return total_cost
+        return round (total_cost, 2)
 
     def save(self):
         self.session[self.cart_session_id] = self.cart

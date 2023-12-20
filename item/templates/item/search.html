@@ -5,6 +5,18 @@
 {% block content %}
     <h1 class="text-2xl">Resultados de busqueda: "{{query}}"</h1>
 
+    <div class="flex justify-end mb-4">
+        <form id="searchForm" method="get" action="{% url 'item:search' %}">
+            <input type="hidden" name="query" value="{{ query }}">
+            <label for="sort">Ordenar por precio:</label>
+            <select id="sort" name="sort" onchange="submitForm()">
+                <option value="">Seleccionar</option>
+                <option value="asc" {% if request.GET.sort == 'asc' %}selected{% endif %}>Ascendente</option>
+                <option value="desc" {% if request.GET.sort == 'desc' %}selected{% endif %}>Descendente</option>
+            </select>
+        </form>
+    </div>
+
     <div class="flex flex-wrap gap-2">
         {% if item %}
             {% for i in item %}
@@ -42,4 +54,10 @@
         {% endif %}
       </div>
     {% endif %}
+
+    <script>
+        function submitForm() {
+            document.getElementById("searchForm").submit();
+        }
+    </script>
 {% endblock %}

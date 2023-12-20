@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Historial de Pedidos</h2>
+    <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="py-3 px-6">Pedido ID</th>
+                    <th scope="col" class="py-3 px-6">Estado</th>
+                    <th scope="col" class="py-3 px-6">Acciones</th>
+                    <th scope="col" class="py-3 px-6">Direccion</th>
+                    <th scope="col" class="py-3 px-6">Precio Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in page_obj %}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td class="py-4 px-6">{{ pedido.id }}</td>
+                        <td class="py-4 px-6">{{ pedido.estado }}</td>
+                        <td class="py-4 px-6">
+                            <form method="post" action="{% url 'pedido:actualizar_estado' pedido.id %}">
+                                {% csrf_token %}
+                                <select name="estado" class="bg-gray-50 border border-gray-300 p-2 rounded">
+                                    <option value="en proceso" {% if pedido.estado == 'en proceso' %}selected{% endif %}>En Proceso</option>
+                                    <option value="enviado" {% if pedido.estado == 'enviado' %}selected{% endif %}>Enviado</option>
+                                    <option value="entregado" {% if pedido.estado == 'entregado' %}selected{% endif %}>Entregado</option>
+                                </select>
+                                <button type="submit" class="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Actualizar Estado
+                                </button>
+                            </form>
+                        </td>
+                        <td class="py-4 px-6">{{ pedido.direccion_envio }}</td>
+                        <td class="py-4 px-6">{{ pedido.costo_total }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+        {% endif %}
+        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+        {% endif %}
+    </div>
+{% endblock %}

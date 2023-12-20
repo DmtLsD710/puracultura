@@ -1,10 +1,10 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Mis Productos{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-6 py-8">
-    <h1 class="text-2xl font-bold mb-4 text-center">Dashboard</h1>
+    <h1 class="text-2xl font-bold mb-4 text-center">Mis Productos</h1>
     <a href="{% url 'item:new' %}" class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 rounded">Agregar producto</a>
 
     {% if items %}

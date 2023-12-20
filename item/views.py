@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, F
 from .cart import Cart
 from .forms import NewItemForm
 from .models import Item, Category
 
 from django.core.paginator import Paginator
 
-# Detail view for a single item
+
 def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, stock__gt=0).exclude(pk=pk)[:3]
@@ -17,7 +17,7 @@ def detail(request, pk):
         'related_items': related_items
     })
 
-# View for adding a new item
+
 @login_required
 def new(request):
     if not request.user.vendedor:
@@ -38,7 +38,7 @@ def new(request):
         'title': 'Nuevo Producto',
     })
 
-# Dashboard view to list all items for the current seller
+
 @login_required
 def dashboard(request):
     if not request.user.vendedor:
@@ -47,7 +47,7 @@ def dashboard(request):
     items = Item.objects.filter(created_by=request.user)
     return render(request, 'item/dashboard.html', {'items': items})
 
-# View for editing an existing item
+
 @login_required
 def edit_item(request, pk):
     if not request.user.vendedor:
@@ -65,10 +65,9 @@ def edit_item(request, pk):
     return render(request, 'item/edit_item.html', {
         'form': form,
         'title': 'Editar Producto',
-        'item': item,  # Pass the item to the template for additional context (optional)
+        'item': item,  
     })
 
-# Function to delete an item
 @login_required
 def delete_item(request, pk):
     if not request.user.vendedor:
@@ -77,30 +76,38 @@ def delete_item(request, pk):
     item = get_object_or_404(Item, pk=pk, created_by=request.user)
     if request.method == 'POST':
         item.delete()
-        return redirect('item:dashboard')  # Redirect to the dashboard after deletion
+        return redirect('item:dashboard')  
     return render(request, 'item/delete_confirm.html', {
         'item': item
     })
 
 def search(request):
     query = request.GET.get('query', '')
-    item = Item.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-    
-    paginator = Paginator(item, 20) # Show 20 items per page.
-    
+    sort_option = request.GET.get('sort', '')
+
+    items = Item.objects.filter(Q(name__icontains=query) | Q(description__icontains=query), stock__gt=0)
+
+    if sort_option == 'asc':
+        items = items.order_by('price')
+    elif sort_option == 'desc':
+        items = items.order_by(F('price').desc())
+
+    paginator = Paginator(items, 10)
+
     page_number = request.GET.get('page')
     item = paginator.get_page(page_number)
-    
+
     return render(request, 'item/search.html', {
         'query': query,
         'item': item
-    })    
+    })
+
     
 def category_detail(request, pk): 
     category = get_object_or_404(Category, pk=pk)
     items = Item.objects.filter(category=category, stock__gt=0) 
     
-    paginator = Paginator(items, 20) # Show 20 items per page.
+    paginator = Paginator(items, 10)
 
     page_number = request.GET.get('page')
     items = paginator.get_page(page_number)

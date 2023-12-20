@@ -19,7 +19,11 @@
             {{ item.description }}
         </p>
         {% endif %}
-            <a href="{% url 'item:add_to_cart' item.id%}" class="inline-block mt-6 px-6 py-3 text-lg text-white bg-slate-600 rounded-xl hover:bg-slate-500 transition-colors duration-300">Agregar al carrito</a>
+        {% if request.user.is_authenticated %}
+            {% if not request.user.vendedor %}
+                <a href="{% url 'item:add_to_cart' item.id%}" class="inline-block mt-6 px-6 py-3 text-lg text-white bg-slate-600 rounded-xl hover:bg-slate-500 transition-colors duration-300">Agregar al carrito</a>
+            {% endif %}
+        {% endif %}    
     </div>
 </div>
 

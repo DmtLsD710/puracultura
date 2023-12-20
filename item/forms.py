@@ -2,7 +2,7 @@
 from django import forms
 
 # Importamos el modelo Item de nuestro módulo models
-from .models import Item
+from .models import Item, Review
 
 # Definimos una nueva forma llamada NewItemForm que hereda de forms.ModelForm
 class NewItemForm(forms.ModelForm):
@@ -27,3 +27,4 @@ class NewItemForm(forms.ModelForm):
             # Para el campo 'stock', usamos un NumberInput y establecemos el atributo 'placeholder' a 'Inventario'
             'stock': forms.NumberInput(attrs={'placeholder': 'Inventario'}),
         }
+        

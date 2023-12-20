@@ -32,9 +32,9 @@
             <div class="flex space-x-4 items-center">
                 {% if request.user.is_authenticated %}
                     {% if request.user.vendedor %}
-                        <a href="{% url 'item:dashboard' %}" class="text-lg font-semibold hover:text-gray-500">Dashboard</a>
+                        <a href="{% url 'item:dashboard' %}" class="text-lg font-semibold hover:text-gray-500">Mis Productos</a>
+                        <a href="{% url 'pedido:historial_pedidos_vendedor' %}" class="text-lg font-semibold hover:text-gray-500">Pedidos</a>
                         <a href="{% url 'userprofile:perfil' %}" class="text-lg font-semibold hover:text-gray-500">Perfil</a>
-                        <a href="#" class="text-lg font-semibold hover:text-gray-500">Mensajes</a>
                         <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
                     {% else %}
                         <a href="{% url 'item:cart_view' %}" class="relative text-lg font-semibold hover:text-gray-500 flex items-center">
@@ -47,8 +47,8 @@
                                 </span>
                             {% endif %}
                         </a>    
-                        <a href="{% url 'userprofile:perfil' %}" class="text-lg font-semibold hover:text-gray-500">Perfil</a>                    
-                        <a href="#" class="text-lg font-semibold hover:text-gray-500">Mensajes</a>
+                        <a href="{% url 'userprofile:perfil' %}" class="text-lg font-semibold hover:text-gray-500">Perfil</a>
+                        <a href="{% url 'pedido:historial_pedidos' %}" class="text-lg font-semibold hover:text-gray-500">Pedidos</a>                    
                         <a href="{% url 'userprofile:logout' %}" class="text-lg font-semibold hover:text-gray-500">Log out</a>
                     {% endif %}
                 {% else %}
@@ -71,8 +71,7 @@
                 <h3 class="mb-5 font-semibold text-gray-400">Menu</h3>
 
                 <ul class="space-y-2">
-                    <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Contacto</a></li>
-                    <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Terminos y condiciones </a></li>
+                    <li><a href="{% url 'core:terms' %}" class="text-lg text-teal-500 hover:text-teal-700">Terminos y condiciones </a></li>
                 </ul>
             </div>
         </footer>

@@ -23,4 +23,4 @@ class Direccion(models.Model):
     codigo_postal = models.CharField(max_length=20)  # Campo de texto para el código postal
 
     def __str__(self):
-        return self.direccion  # Representación en cadena de la dirección
+        return f"{self.direccion}, {self.ciudad}, {self.pais}, {self.codigo_postal}"
